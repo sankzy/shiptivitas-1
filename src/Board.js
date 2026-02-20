@@ -10,9 +10,12 @@ export default class Board extends React.Component {
     const clients = this.getClients();
     this.state = {
       clients: {
-        backlog: clients.filter(client => !client.status || client.status === 'backlog'),
-        inProgress: clients.filter(client => client.status && client.status === 'in-progress'),
-        complete: clients.filter(client => client.status && client.status === 'complete'),
+        backlog: clients.map(client => ({
+          ...client,
+          status: 'backlog' 
+        })),
+        inProgress: [],
+        complete: [],
       }
     }
     this.swimlanes = {
@@ -21,6 +24,58 @@ export default class Board extends React.Component {
       complete: React.createRef(),
     }
   }
+
+  componentDidMount() {
+    this.drake = Dragula([
+      this.swimlanes.backlog.current,
+      this.swimlanes.inProgress.current,
+      this.swimlanes.complete.current,
+    ]);
+    this.drake.on('drop', (el, target, source) => {
+      this.drake.cancel(true);
+      let newStatus = 'backlog';
+      if (target === this.swimlanes.inProgress.current) newStatus = 'in-progress';
+      if (target === this.swimlanes.complete.current) newStatus = 'complete';
+      const clientId = el.getAttribute('data-id');
+      this.updateClientStatus(clientId, newStatus);
+    });
+  }
+
+  updateClientStatus(clientId, newStatus) {
+    const allClients = [
+      ...this.state.clients.backlog,
+      ...this.state.clients.inProgress,
+      ...this.state.clients.complete,
+    ];
+
+    const clientIndex = allClients.findIndex(c => c.id === clientId);
+    if (clientIndex !== -1) {
+      const client = allClients[clientIndex];
+      const updatedClient = { ...client, status: newStatus };
+
+      this.setState({
+        clients: {
+          backlog: [
+            ...this.state.clients.backlog.filter(c => c.id !== clientId),
+            ...(newStatus === 'backlog' ? [updatedClient] : [])
+          ],
+          inProgress: [
+            ...this.state.clients.inProgress.filter(c => c.id !== clientId),
+            ...(newStatus === 'in-progress' ? [updatedClient] : [])
+          ],
+          complete: [
+            ...this.state.clients.complete.filter(c => c.id !== clientId),
+            ...(newStatus === 'complete' ? [updatedClient] : [])
+          ],
+        }
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.drake.destroy();
+  }
+
   getClients() {
     return [
       ['1','Stark, White and Abbott','Cloned Optimal Architecture', 'in-progress'],
@@ -50,6 +105,7 @@ export default class Board extends React.Component {
       status: companyDetails[3],
     }));
   }
+
   renderSwimlane(name, clients, ref) {
     return (
       <Swimlane name={name} clients={clients} dragulaRef={ref}/>

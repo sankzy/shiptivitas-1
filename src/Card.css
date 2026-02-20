@@ -1,25 +1,36 @@
 .Card {
-  background-color: lightgrey;
-  font-size: 12px;
-  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   margin-bottom: 10px;
+  padding: 15px;
+  cursor: pointer;
+  border-left: 5px solid transparent;
 }
 
 .Card-grey {
-  background-color: rgba(167, 158, 158, 0.671);
-  color: black;
+  background-color: #f1f5f9 !important; 
+  border-left: 5px solid #94a3b8 !important;
 }
 
 .Card-blue {
-  background-color: skyblue;
-  color: white;
+  background-color: #eff6ff !important;
+  border-left: 5px solid #3b82f6 !important;
 }
 
 .Card-green {
-  background-color: rgb(150, 190, 150);
-  color: white;
+  background-color: #f0fdf4 !important;
+  border-left: 5px solid #22c55e !important;
 }
 
 .Card-title {
   font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #1e293b;
+}
+
+.Card-description {
+  font-size: 14px;
+  color: #64748b;
 }
