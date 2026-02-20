@@ -78,3 +78,13 @@ then use it by calling `Dragula` directly.
 
 Visit Dragula repository on github for more information
 [https://github.com/bevacqua/dragula](https://github.com/bevacqua/dragula)
+
+Task 1: Kanban Board Implementation
+
+Objective: Improve freight shipping task management by implementing a three-lane Kanban board.
+
+Key Features:
+Integrated Dragula for smooth drag-and-drop functionality.
+Developed a state-driven architecture to ensure UI color consistency (Grey/Blue/Green) across lanes.
+Optimized the user experience by allowing real-time reordering and status updates without page refreshes.
+Technical Stack: React, Dragula, CSS3.
